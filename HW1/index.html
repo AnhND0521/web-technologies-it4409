@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<head>
+    <title>CTTBK • MainPage</title>
+    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <aside>
+        <div class="nav-box">
+            <h3>
+                <img src="assets/profile.png"/>
+                <span>NGUYỄN ĐỨC ANH</span>
+            </h3>
+            <div class="nav-list">
+                <a href="#">Thư báo <span class="noti">0</span></a>
+                <a href="#">Đổi mật khẩu</a>
+                <a href="#">Cấp lại mật khẩu Email trường</a>
+                <a href="#">Thoát đăng nhập</a>
+                <a href="#">Thông tin mật khẩu Email cấp mới</a>
+                <a href="#">Xác nhận khai báo y tế</a>
+            </div>
+        </div>
+        <br/>
+        <div class="nav-box">
+            <h3>QUẢN LÝ HỒ SƠ SINH VIÊN</h3>
+            <div class="nav-list">
+                <a href="#">Thông tin sinh viên</a>
+                <a href="#">Cập nhật thông tin cá nhân</a>
+                <a href="#">Thông tin lớp sinh viên</a>
+            </div>
+        </div>
+        <br/>
+        <div class="nav-box">
+            <h3>ĐÀO TẠO</h3>
+            <div class="nav-list">
+                <a href="#">Chương trình đào tạo</a>
+                <a href="#">Kế hoạch học tập</a>
+                <a href="#">Kết quả học tập</a>
+                <a href="#">Đồ án - Tốt nghiệp</a>
+                <a href="#">Thời khóa biểu tạm thời</a>
+            </div>
+        </div>
+        <br/>
+        <div class="nav-box">
+            <h3>TƯ VẤN TRỰC TUYẾN</h3>
+            <div class="nav-list">
+                <a href="#">Hỏi đáp - Tư vấn trực tuyến</a>
+            </div>
+        </div>
+        <br/>
+        <div class="nav-box">
+            <h3>TÀI CHÍNH HỌC VỤ</h3>
+            <div class="nav-list">
+                <a href="#">Thông tin công nợ học phí</a>
+                <a href="#">Thanh toán học phí trực tuyến</a>
+            </div>
+        </div>
+        <br/>
+        <div class="nav-box">
+            <h3>DỊCH VỤ HÀNH CHÍNH</h3>
+            <div class="nav-list">
+                <a href="#">ĐK cấp giấy tờ</a>
+            </div>
+        </div>
+    </aside>
+
+    <div class="main-content">
+        <div class="title">
+            <h1>THÔNG TIN CÁ NHÂN</h1>
+            <hr/>
+        </div>
+        <div class="content">
+            <h2>THÔNG TIN SINH VIÊN 
+                <a id="btn-edit" href="#" style="margin-left: 30px;"><i class="fa fa-edit"></i></a>
+            </h2>
+            <hr/>
+            <div class="profile">
+                <div class="col-1st info">
+                    <img src="assets/profile.png" class="img-profile"/>
+                    <div style="margin-top: 30px;"><label>MSSV: </label>20214985</div>
+                </div>
+                <div class="col-2nd info">
+                    <div><label>Họ và tên:&emsp;</label><span id="ho-ten">Nguyễn Đức Anh</span></div>
+                    <div><label>Năm vào trường:&emsp;</label><span id="nam-vao-truong">2021</span></div>
+                    <div><label>Bậc đào tạo:&emsp;</label><span id="bac-dt">KSCLC-TN-TT-VN-ICT</span></div>
+                    <div><label>Chương trình:&emsp;</label><span id="chuong-trinh">Công nghệ thông tin Việt-Nhật 2021</span></div>
+                    <div><label>Khoa/Viện quản lý:&emsp;</label><span id="khoa-vien">Trường Công nghệ Thông tin và Truyền thông</span></div>
+                    <div><label>Tình trạng học tập:&emsp;</label><span id="tinh-trang">Học</span></div>
+                </div>
+                <div class="col-3rd info">
+                    <div><label>Giới tính:&emsp;</label><span id="gioi-tinh">Nam</span></div>
+                    <div><label>Lớp:&emsp;</label><span id="lop">Việt Nhật 04-K66</span></div>
+                    <div><label>Khóa học:&emsp;</label><span id="khoa">66</span></div>
+                    <div><label>Email:&emsp;</label><span id="email">anh.nd214985@sis.hust.edu.vn</span></div>
+                </div>
+            </div>
+            <h2>THÔNG TIN HỌC TẬP</h2>
+            <hr/>
+            <div class="grade">
+                <div class="col info">
+                    <div><label>Tổng kết học kỳ:&emsp;</label><span>20222</span></div>
+                    <div><label>Trung bình tích lũy:&emsp;</label><span>3.9</span></div>
+                    <div><label>Số TC nợ đăng ký:&emsp;</label><span>0</span></div>
+                </div>
+                <div class="col info">
+                    <div><label>Số TC tích lũy:&emsp;</label><span>72</span></div>
+                    <div><label>Trình độ sinh viên:&emsp;</label><span>3</span></div>
+                    <div><label>Mức cảnh báo:&emsp;</label><span>M0</span></div>
+                </div>
+            </div>
+            <h2>THÔNG TIN CÁ NHÂN</h2>
+            <hr/>
+            <div class="personal">
+                <div class="col info">
+                    <div><label>Dân tộc:&emsp;</label><span>KINH</span></div>
+                    <div><label>Năm TN cấp 3:&emsp;</label><span>2021</span></div>
+                    <div><label>Địa chỉ:&emsp;</label><span>THỊ TRẤN NHO QUAN, HUYỆN NHO QUAN, TỈNH NINH BÌNH</span></div>
+                    <div><label>Số CMTND:&emsp;</label><span>037***10</span></div>
+                    <div><label>Nơi cấp:&emsp;</label><span>NINH BÌNH</span></div>
+                    <div><label>Họ tên bố:&emsp;</label><span>NGUYỄN *** ****</span></div>
+                    <div><label>Năm sinh:&emsp;</label><span>19**</span></div>
+                    <div><label>Nghề nghiệp:&emsp;</label><span>***</span></div>
+                    <div><label>Điện thoại:&emsp;</label><span>091***25</span></div>
+                    <div><label>Email:&emsp;</label><span>***@gmail.com</span></div>
+                </div>
+                <div class="col info">
+                    <div><label>Tôn giáo:&emsp;</label><span>KHÔNG</span></div>
+                    <div><label>Trường THPT:&emsp;</label><span>THPT NHO QUAN B - NINH BÌNH</span></div>
+                    <div><label>Hộ khẩu:&emsp;</label><span>THỊ TRẤN NHO QUAN, HUYỆN NHO QUAN, TỈNH NINH BÌNH</span></div>
+                    <div><label>Số Điện thoại:&emsp;</label><span>094***55</span></div>
+                    <div><label>Họ tên mẹ:&emsp;</label><span>NGUYỄN *** **** *****</span></div>
+                    <div><label>Năm sinh:&emsp;</label><span>19**</span></div>
+                    <div><label>Nghề nghiệp:&emsp;</label><span>***</span></div>
+                    <div><label>Điện thoại:&emsp;</label><span>094***05</span></div>
+                    <div><label>Email:&emsp;</label><span>***@gmail.com</span></div>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="info" style="margin-left: 0px;"><label>Ghi chú: </label><span>Nếu sinh viên thấy thông tin của mình chưa chính xác, xin vui lòng liên hệ phòng Đào tạo để cập nhật lại.</span></div>
+    </div>
+
+    <script>
+        let data = localStorage.getItem("data");
+        if (data) {
+            data = JSON.parse(data);
+
+            document.getElementById("ho-ten").textContent = data.hoTen;
+            document.getElementById("nam-vao-truong").textContent = data.namVaoTruong;
+            document.getElementById("bac-dt").textContent = data.bacDT;
+            document.getElementById("chuong-trinh").textContent = data.chuongTrinh;
+            document.getElementById("khoa-vien").textContent = data.khoaVien;
+            document.getElementById("tinh-trang").textContent = data.tinhTrang;
+            document.getElementById("gioi-tinh").textContent = data.gioiTinh;
+            document.getElementById("lop").textContent = data.lop;
+            document.getElementById("khoa").textContent = data.khoa;
+            document.getElementById("email").textContent = data.email;
+        }
+
+        document.getElementById("btn-edit").addEventListener("click", (event) => {
+            event.preventDefault();
+
+            let data = {
+                hoTen: document.getElementById("ho-ten").textContent,
+                namVaoTruong: document.getElementById("nam-vao-truong").textContent,
+                bacDT: document.getElementById("bac-dt").textContent,
+                chuongTrinh: document.getElementById("chuong-trinh").textContent,
+                khoaVien: document.getElementById("khoa-vien").textContent,
+                tinhTrang: document.getElementById("tinh-trang").textContent,
+                gioiTinh: document.getElementById("gioi-tinh").textContent,
+                lop: document.getElementById("lop").textContent,
+                khoa: document.getElementById("khoa").textContent,
+                email: document.getElementById("email").textContent
+            };
+
+            localStorage.setItem("data", JSON.stringify(data));
+
+            window.location.href = "edit.html";
+        });
+    </script>
+</body>
