@@ -173,11 +173,13 @@ hr {
 
 .info > div > input,
 .info > div > select {
-    padding: 3px;
+    padding: 5px;
     font-family: 'Times New Roman', Times, serif;
     font-size: 12pt;
     width: 100%;
     box-sizing: border-box;
+    border-radius: 15px;
+    border-width: 1px;
 }
 
 .info-flex > div {
@@ -209,9 +211,21 @@ hr {
 .submit-btns button {
     margin: 10px 0px 10px 15px;
     width: 100px;
-    height: 30px;
+    height: 32px;
     font-weight: bold;
     cursor: pointer;
+    border-radius: 15px;
+    border-width: 0px;
+}
+
+#btn-ok {
+    background-color: #28a745;
+    color: white;
+}
+
+#btn-cancel {
+    background-color: #17a2b8;
+    color: white;
 }
 
 @media only screen and (max-width: 768px) {
