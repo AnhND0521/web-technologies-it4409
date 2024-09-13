@@ -1,0 +1,322 @@
+body {
+    margin: 0px;
+    margin-top: 10px;
+}
+
+aside {
+    display: block;
+    position: absolute;
+    top: 10px;
+    left: 0px;
+}
+
+.nav-box {
+    display: block;
+    width: 265px;
+    background-color: #F2F1EB;
+    padding: 10px;
+    font-family: "Segoe UI", "Helvetica Neue", "Droid Sans", Arial, Tahoma, Geneva, sans-serif;
+}
+
+.nav-box h3 {
+    text-transform: uppercase;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: #9C1010;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+h3 img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.nav-list a {
+    font-size: 13px;
+    color: #337ABC;
+    border-bottom: 1px solid #CCCCCC;
+    padding: 5px 7px 5px 7px;
+    display: block;
+    line-height: 26px;
+    text-decoration: none;
+}
+
+.nav-list a:hover {
+    background-color: #EBEBEB;
+    color: #9C1010;
+}
+
+.nav-box .nav-list {
+    padding-left: 10px;
+    margin-bottom: 10px;
+}
+
+.noti {
+    background-color: #9C1010;
+    border-radius: 10px;
+    padding: 3px 7px 3px 7px;
+    font-weight: bold;
+    font-size: 12px;
+    color: white;
+    line-height: 12px;
+    display: inline-block;
+}
+
+.main-content {
+    display: block;
+    position: absolute;
+    top: 10px;
+    left: 285px;
+    width: 80%;
+}
+
+h1, h2 {
+    text-transform: uppercase;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 14pt;
+    font-weight: bold;
+    color: red;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+h2 {
+    display: flex;
+    align-items: center;
+}
+
+h2 i.fa.fa-edit {
+    font-size: 36px;
+    color: black;
+}
+
+.title {
+    padding: 5px;
+}
+
+.title h1 {
+    text-align: center;
+}
+
+hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.title hr {
+    border-top: 1px solid #EEEEEE;
+}
+
+.content {
+    padding: 0;
+    width: 100%;
+}
+
+.content hr {
+    border: 2.66667px solid #FF9900;
+    width: 85%;
+    margin-left: 0px;
+}
+
+.info > div {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 13pt;
+    margin: 0px 15px 15px 15px;
+    text-align: left;
+}
+
+.info label {
+    font-weight: bold;
+    font-style: italic;
+}
+
+.info span {
+    font-weight: bold;
+}
+
+.profile {
+    display: flex;
+}
+
+.profile .col-1st {
+    align-items: center;
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.profile .col-2nd,
+.profile .col-3rd {
+    flex: 4;
+}
+
+.img-profile {
+    width: 180px;
+    height: 270px;
+    display: block;
+    box-shadow: 12px 12px 5px rgba(173, 216, 230, 1);
+}
+
+.grade, .personal {
+    display: flex;
+}
+
+.col {
+    flex: 1;
+}
+
+.form-profile {
+    display: flex;
+    width: 100%;
+}
+
+.info > div > input,
+.info > div > select {
+    padding: 5px;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 12pt;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 15px;
+    border-width: 1px;
+}
+
+.info-flex > div {
+    display: flex;
+    align-items: center;
+}
+
+.col-2nd.info-flex label {
+    flex: 2;
+}
+
+.col-2nd.info-flex > div > input,
+.col-2nd.info-flex > div > select {
+    flex: 3;
+    margin-right: 20px;
+}
+
+.col-3rd.info-flex > div > label {
+    flex: 1;
+}
+
+.col-3rd.info-flex > div > input,
+.col-3rd.info-flex > div > select,
+.col-3rd.info-flex > div > .radio-group {
+    flex: 3;
+    margin-right: 60px;
+}
+
+.header-bar {
+    margin: 10px 0px 10px 0px;
+    display: flex;
+    justify-content: space-between;
+    height: 36px;
+}
+
+.header-bar h2 {
+    flex: 5;
+    line-height: 36px;
+}
+
+.submit-btns {
+    flex: 3;
+    margin: 0;
+}
+
+button {
+    margin: 0px 5px 0px 5px;
+    width: 80px;
+    height: 32px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 15px;
+    border-width: 0px;
+}
+
+#btn-ok {
+    background-color: #28a745;
+    color: white;
+}
+
+#btn-cancel {
+    background-color: #17a2b8;
+    color: white;
+}
+
+#btn-reset {
+    background-color: #ff0000;
+    color: white;
+}
+
+.avt-input-label {
+    padding: 8px 15px 8px 15px;
+    margin-bottom: 10px;
+    background-color: #337ABC;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#avt-input {
+    display: none;
+}
+
+@media only screen and (max-width: 768px) {
+    .nav-box {
+        display: none;
+    }
+
+    .main-content {
+        left: 0px;
+        width: 100%;
+    }
+
+    .profile, .grade, .personal {
+        flex-direction: column;
+    }
+
+    .col-2nd.info-flex > div > label {
+        flex: 1;
+    }
+
+    .col-2nd.info-flex > div > input,
+    .col-2nd.info-flex > div > select {
+        margin-right: 0px;
+    }
+
+    .col-3rd.info-flex > div > input,
+    .col-3rd.info-flex > div > select,
+    .col-3rd.info-flex > div > .radio-group {
+        margin-right: 0px;
+    }
+
+    .header-bar {
+        display: block;
+        height: auto;
+    }
+
+    .submit-btns {
+        display: block;
+    }
+
+    .submit-btns button {
+        margin: 10px;
+    }
+
+    .info > div {
+        font-size: 11pt;
+    }
+
+    .info > div > input,
+    .info > div > select {
+        font-size: 11pt;
+    }
+}

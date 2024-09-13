@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gmail Clone</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f1f1f1;
+    }
+
+    #header {
+      background-color: #c41d3c;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    #container {
+      display: block;
+      max-width: 1200px;
+      margin: 20px auto;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 10px;
+    }
+
+    #button-wrapper {
+      margin: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .custom-button {
+      background-color: #c41d3c;
+      color: white;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      border: 0px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    #mail-content {
+      width: 100%;
+      height: 600px;
+    }
+  </style>
+</head>
+<body>
+  <div id="header">
+    My Gmail Client
+  </div>
+
+  <div id="button-wrapper">
+    <button id="btn-back" class="custom-button">&#10094; Go back</button>
+  </div>
+
+  <div id="container">
+    <p><b>From: </b><span id="from"></span></p>
+    <p><b>To: </b><span id="to"></span></p>
+    <p><b>Time: </b><span id="time"></span></p>
+    <p><b>Subject: </b><em><span id="subject"></span></em></p>
+    <p id="attachments-field"><b>Attachments: </b><span id="attachments"></span></p>
+    <iframe id="mail-content" title="mail-content"></iframe>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script>
+    function getCookie(name) {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.startsWith(name + '=')) {
+              return cookie.substring(name.length + 1);
+          }
+      }
+      return null;
+    }
+
+    function decodeBase64(base64String) {
+      const decodedString = atob(base64String.replace(/-/g, "+").replace(/_/g, "/"));
+      return decodeURIComponent(escape(decodedString));
+    }
+
+    $("#header").css("cursor", "pointer").click(() => window.location.href = ".");
+    $("#btn-back").click(() => window.location.href = ".");
+    $("#attachments-field").css("display", "none");
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get("id");
+    const sessionId = getCookie("session_id");
+    const accessToken = getCookie("access_token");
+    if (id && sessionId && accessToken) {
+      const headers = { "Authorization" : `Bearer ${accessToken}` };
+
+      function createAttachmentLink(attachmentId, filename) {
+        $.ajax({
+          url: `https://www.googleapis.com/gmail/v1/users/${sessionId}/messages/${id}/attachments/${attachmentId}`,
+          type: "GET",
+          headers: headers,
+          success: (data, textStatus, jqXHR) => {
+            console.log(data.data);
+            content = atob(data.data.replace(/-/g, "+").replace(/_/g, "/"));
+            console.log(content);
+
+            const uint8Array = new Uint8Array(content.length);
+            for (let i = 0; i < content.length; i++) {
+              uint8Array[i] = content.charCodeAt(i);
+            }
+
+            const blob = new Blob([uint8Array]);
+
+            const fileHref = $("<a>", {
+              href: URL.createObjectURL(blob),
+              download: filename,
+              text: filename
+            }).css("margin", "0px 10px 0px 10px");
+            $("#attachments-field").css("display", "")
+            $("#attachments").append(fileHref);
+          },
+          error: (jqXHR, textStatus, errorThrown) => {
+            console.log(errorThrown);
+          }
+        });
+      }
+
+      $.ajax({
+        url: `https://www.googleapis.com/gmail/v1/users/${sessionId}/messages/${id}`,
+        type: "GET",
+        headers: headers,
+        success: (data, textStatus, jqXHR) => {
+          for (let entry of data.payload.headers) {
+            if (entry.name === "From") {
+              $("#from").text(entry.value.trim());
+            } else if (entry.name === "To") {
+              $("#to").text(entry.value.trim());
+            } else if (entry.name === "Subject") {
+              $("#subject").text(entry.value.trim());
+            } else if (entry.name === "Date") {
+              $("#time").text(new Date(entry.value.trim()).toLocaleString());
+            }
+          }
+
+          const mailContent = $("#mail-content")[0].contentWindow.document;
+          if (!data.payload.parts) {
+            const content = decodeBase64(data.payload.body.data);
+            let contentType;
+            for (let entry of data.payload.headers) {
+              if (entry.name === "Content-Type") {
+                contentType = entry.value.split(";")[0];
+                break;
+              }
+            }
+            console.log(contentType);
+            if (contentType === "text/html") {
+              mailContent.open();
+              mailContent.write(content);
+              mailContent.close();
+            } else {
+              mailContent.open();
+              mailContent.write(content.replace(/\n/g, "<br/>"));
+              mailContent.close();
+            }
+          } else {
+            for (let part of data.payload.parts) {
+              if (part.mimeType === "text/html") {
+                mailContent.open();
+                mailContent.write(decodeBase64(part.body.data));
+                mailContent.close();
+                return;
+              }
+              if (part.filename && part.body.attachmentId) {
+                createAttachmentLink(part.body.attachmentId, part.filename);
+              }
+            }
+            mailContent.open();
+            mailContent.write(decodeBase64(data.payload.parts[0].body.data).replace(/\n/g, "<br/>"));
+            mailContent.close();
+          }
+        },
+        error: (jqXHR, textStatus, errorThrown) => {
+            console.log(errorThrown);
+        }
+      });
+    } else {
+      window.location.href = ".";
+    }
+  </script>
+</body>
+</html>

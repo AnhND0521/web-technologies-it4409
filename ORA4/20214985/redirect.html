@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gmail Clone</title>
+</head>
+<body>
+    <h3>Redirecting...</h3>
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+        function decodeJWT(token) {
+            // Split the token into header, payload, and signature
+            const [header, payload, signature] = token.split('.');
+        
+            // Decode base64-encoded parts
+            const decodedHeader = atob(header);
+            const decodedPayload = atob(payload);
+        
+            // Parse the JSON data
+            const headerJson = JSON.parse(decodedHeader);
+            const payloadJson = JSON.parse(decodedPayload);
+        
+            // Return the decoded data
+            return {
+                header: headerJson,
+                payload: payloadJson,
+                signature: signature,
+            };
+        }
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get("code");
+        const scope = urlParams.get("scope");
+        if (code && scope) {
+            console.log("code: " + code);
+            console.log("scope: " + scope);
+
+            const clientId = "65398682361-ah9t8v2b919d42q5f272n7bf992mjpj3.apps.googleusercontent.com";
+            const clientSecret = "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";
+
+            $.ajax({
+                url: "https://accounts.google.com/o/oauth2/token",
+                type: "POST",
+                headers: { "content-type" : "application/x-www-form-urlencoded" },
+                data: `grant_type=authorization_code&code=${code}&client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=http%3A%2F%2Flocalhost%2F20214985%2Fredirect.html`,
+                success: (data, textStatus, jqXHR) => {
+                    console.log(data);
+
+                    const email = decodeJWT(data.id_token).payload.email;
+                    const accessToken = data.access_token;
+                    const d = new Date();
+                    d.setTime(d.getTime() + 3600*1000);
+
+                    console.log(email);
+
+                    document.cookie = `session_id=${email}; expires=${d.toUTCString()}; path=/20214985/;`;
+                    document.cookie = `access_token=${accessToken}; expires=${d.toUTCString()}; path=/20214985/;`;
+
+                    window.location.href = ".";
+                },
+                error: (jqXHR, textStatus, errorThrown) => {
+                    console.log(errorThrown);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Gmail Client</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f1f1f1;
+    }
+
+    #header {
+      background-color: #c41d3c;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    #container {
+      display: block;
+      max-width: 1200px;
+      margin: 20px auto;
+    }
+
+    #login-bar {
+      margin: 10px;
+      padding: 10px;
+    }
+
+    #login-bar > div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #main {
+      flex: 1;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 10px;
+    }
+
+    .custom-button {
+      background-color: #c41d3c;
+      color: white;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      border: 0px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .custom-button:hover {
+      background-color: rgb(202, 57, 84);
+    }
+
+    .custom-button a {
+        color: white;
+        text-decoration: none;
+    }
+
+    #if-logged-in {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #email-table {
+      width: 100%;
+      margin-top: 10px;
+      border-collapse: collapse;
+    }
+
+    .email-header {
+        background-color: white;
+        height: 40px;
+        display: none;
+    }
+
+    .email-header th {
+        padding: 10px;
+    }
+
+    .email-header th:nth-child(1) {
+      text-align: left;
+    }
+
+    .email-item {
+      border-bottom: 1px solid #ddd;
+    }
+
+    .email-item td {
+      padding: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      cursor: pointer;
+    }
+
+    .email-item td:nth-child(4) {
+      text-align: center;
+    }
+
+    .email-item:hover {
+      background-color: #f9f9f9;
+    }
+
+    .modal {
+        background-color: #fff;
+        border-radius: 8px;
+        width: 600px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        margin: 16px;
+        position: fixed;
+        bottom: 16px;
+        right: 16px;
+        display: none;
+    }
+
+    .modal-title-bar {
+      height: 36px;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      right: 0px;
+      background-color: #f9f2f5;
+    }
+
+    .modal-title {
+      font-size: 15px;
+      font-weight: bold;
+      position: absolute;
+      top: 10px;
+      left: 15px;
+    }
+
+    .modal-btn {
+        cursor: pointer;
+        position: absolute;
+        top: 10px;
+        right: 15px;
+    }
+
+    .modal-content {
+        margin-top: 34px;
+    }
+
+    .modal-content form {
+      padding: 10px 15px 15px 15px;
+    }
+
+    .modal-content form input {
+      width: 100%;
+      height: 30px;
+      border: 0;
+      outline: 0;
+      font-size: 15px;
+    }
+
+    .modal-content form input:focus {
+      border: 0;
+      outline: 0;
+    }
+
+    .modal-content form textarea {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      font-size: 15px;
+      resize: none;
+    }
+
+    #file-input {
+      display: none;
+    }
+
+    #file-input-label {
+      cursor: pointer;
+    }
+
+    #file-list {
+      margin-left: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div id="header">
+    My Gmail Client
+  </div>
+
+  <div id="login-bar">
+    <div id="if-not-logged-in">
+        <button class="custom-button"><a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=65398682361-ah9t8v2b919d42q5f272n7bf992mjpj3.apps.googleusercontent.com&amp;response_type=code&amp;scope=https%3A%2F%2Fmail.google.com%20openid%20email&amp;redirect_uri=http%3A%2F%2Flocalhost%2F20214985%2Fredirect.html&amp;approval_prompt=force">Login with Google</a></button>
+    </div>
+    <div id="if-logged-in">
+        <p id="logged-in-email"></p>
+        <button class="custom-button" onclick="logout()">Log out</button>
+    </div>
+  </div>
+
+  <div id="container">
+    <div id="main">
+      <button class="custom-button" onclick="openModal()">&#9998; Compose</button>
+      <table id="email-table">
+        <tr class="email-header">
+            <th>Type</th>
+            <th>From / To</th>
+            <th>Content</th>
+            <th>Time</th>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="compose-modal" class="modal">
+    <div class="modal-title-bar">
+      <span class="modal-title">New mail</span>
+      <span class="modal-btn" onclick="closeModal()">&times;</span>
+    </div>
+    <div class="modal-content">
+        <!-- Form for composing mail -->
+        <form onsubmit="sendMail(event)">
+            <input type="text" id="to" name="to" placeholder="To" required><br>
+            <hr>
+            <input type="text" id="subject" name="subject" placeholder="Subject" required><br>
+            <hr>
+            <textarea id="message" name="message" rows="20" required></textarea><br>
+            <hr>
+            <div id="submit-bar">
+              <button class="custom-button" type="submit">➤ Send</button>
+              <label id="file-input-label" for="file-input">&#x1f4ce; Attach file(s)</label>
+              <span id="file-list"></span>
+              <input type="file" id="file-input" name="file" accept=".txt, .html, .xml, .jpg, .jpeg, .png, .gif, .pdf, .doc, .docx, .xsl, .xslx" multiple>
+            </div>
+        </form>
+    </div>
+</div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script>
+    function openModal() {
+        document.getElementById('compose-modal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('compose-modal').style.display = 'none';
+        $("#to").val("");
+        $("#subject").val("");
+        $("#message").val("");
+        $("#file-input").val("");
+        $("#file-list").text("");
+    }
+
+    function getCookie(name) {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.startsWith(name + '=')) {
+                return cookie.substring(name.length + 1);
+            }
+        }
+        return null;
+    }
+
+    function deleteCookie(name) {
+        document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/20214985/;";
+    }
+
+    function logout() {
+        deleteCookie("session_id");
+        deleteCookie("access_token");
+        window.location.reload();
+    }
+
+    function base64UrlEncode(str) {
+      const utf8Bytes = new TextEncoder().encode(str);
+      const base64String = btoa(String.fromCharCode.apply(null, utf8Bytes));
+      const base64UrlEncoded = base64String
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
+
+      return base64UrlEncoded;
+    }
+
+    $("#header").css("cursor", "pointer").click(() => window.location.href = ".");
+    $("#file-input").change((event) => {
+      const fileInput = event.target;
+      const files = fileInput.files;
+      console.log(files);
+      if (files) {
+        if (files.length === 1) {
+          $("#file-list").text(files[0].name);
+        } else {
+          $("#file-list").text(`${files.length} files`);
+        }
+      } else {
+        $("#file-list").text("");
+      }
+    });
+
+    const sessionId = getCookie("session_id");
+    const accessToken = getCookie("access_token");
+    if (!sessionId || !accessToken) {
+        $("#if-logged-in").css("display", "none"); 
+        $("#container").css("display", "none");
+        $("#if-not-logged-in").css("display", "");
+    } else {
+        $("#if-not-logged-in").css("display", "none");
+        $("#if-logged-in").css("display", "flex"); 
+        $("#container").css("display", "");
+        $("#logged-in-email").text("Logged in as " + sessionId);
+
+        const headers = { "Authorization" : `Bearer ${accessToken}` };
+
+        function sendMail(event) {
+          event.preventDefault();
+
+          const fileInputs = document.getElementById("file-input").files;
+          console.log(fileInputs);
+
+          if (fileInputs.length === 0) {
+            console.log($("#message").val());
+            console.log(base64UrlEncode($("#message").val()));
+            
+            let rawContent = `From: <${sessionId}>\r\n` +
+                            `To: <${$("#to").val().trim()}>\r\n` +
+                            `Subject: ${$("#subject").val().trim()}\r\n\r\n` +
+                            `${$("#message").val().trim()}`;
+            rawContent = base64UrlEncode(rawContent);
+
+            $.ajax({
+              url: `https://www.googleapis.com/gmail/v1/users/${sessionId}/messages/send`,
+              type: "POST",
+              headers: {
+                ...headers,
+                "Content-Type": "application/json",
+              },
+              data: JSON.stringify({ raw: rawContent }),
+              success: function(data) {
+                closeModal();
+                alert("Mail sent successfully!");
+                window.location.reload();
+              },
+              error: function(jqXHR, textStatus, errorThrown) {
+                console.error(errorThrown);
+              }
+            });
+          } else {            
+            const message = {
+              from: sessionId,
+              to: $("#to").val().trim(),
+              subject: $("#subject").val().trim(),
+              body: $("#message").val().trim()
+            };
+
+            sendMailWithAttachments(message, fileInputs);
+          }
+        }
+
+        $.ajax({
+            url: `https://www.googleapis.com/gmail/v1/users/${sessionId}/messages`,
+            type: "GET",
+            headers: headers,
+            success: (data, textStatus, jqXHR) => {
+                for (let message of data.messages) {
+                    $.ajax({
+                        url: `https://www.googleapis.com/gmail/v1/users/${sessionId}/messages/${message.id}`,
+                        type: "GET",
+                        headers: headers,
+                        success: (data, textStatus, jqXHR) => {
+                            let type = data.labelIds.includes("INBOX") ? "Inbox" : "Sent";
+                            let fromto;
+                            let subject;
+                            let snippet = data.snippet.trim();
+                            let date;
+                            let dateString;
+                            let fullDate;
+
+                            for (let entry of data.payload.headers) {
+                                if ((type === "Inbox" && entry.name === "From") || (type === "Sent" && entry.name === "To")) {
+                                    fromto = entry.value.trim();
+                                    const i = fromto.indexOf("<");
+                                    if (i > 0) {
+                                      fromto = fromto.substring(0, fromto.indexOf("<"));
+                                    }
+                                } else if (entry.name === "Subject") {
+                                    subject = entry.value.trim();
+                                } else if (entry.name === "Date") {
+                                    fullDate = entry.value.trim();
+                                    date = new Date(fullDate);
+                                    const today = new Date();
+                                    if (date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear()) {
+                                        dateString = date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false });
+                                    } else {
+                                        dateString = date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+                                    }
+                                }
+                            }
+
+                            let newRow = $("<tr>", { class: "email-item" }).append(
+                                $("<td>", { text : type }).css("max-width", "20px"),
+                                $("<td>", { text : fromto }).css("max-width", "100px"),
+                                $("<td>").css("max-width", "400px").append(
+                                    $("<b>", { text : subject }),
+                                    $("<span>", { text : " - " + snippet })
+                                ),
+                                $("<td>", { text : dateString })
+                            ).data("fullDate", fullDate)        
+                            .click(() => window.location.href = `mail.html?id=${message.id}`);
+
+                            let rows = $("#email-table").children().children("tr").slice(1);
+                            for (let row of rows) {
+                                if (date.getTime() > new Date($(row).data("fullDate")).getTime()) {
+                                    $(row).before(newRow);
+                                    return;
+                                }
+                            }
+
+                            $("#email-table").append(newRow);
+                        },
+                        error: (jqXHR, textStatus, errorThrown) => {
+                            console.log(errorThrown);
+                        }
+                    });
+                }
+            },
+            error: (jqXHR, textStatus, errorThrown) => {
+                console.log(errorThrown);
+            }
+        });
+    }    
+
+    function sendMailWithAttachments(message, files) {
+      getAttachments(files).then((attachments) => {
+        console.log("All attachments:", attachments);
+        message = {...message, files: attachments};
+        console.log(message);
+        callGmailAPI(message);
+      });
+
+      function callGmailAPI(message) {
+        var payload = createMimeMessage(message);
+        console.log(payload);
+
+        $.ajax({
+          url: `https://www.googleapis.com/upload/gmail/v1/users/${getCookie("session_id")}/messages/send?uploadType=media`,
+          type: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + getCookie("access_token"), // Replace with your access token
+            'Content-Type': 'message/rfc822',
+          },
+          data: payload,
+          success: function (response) {
+            closeModal();
+            alert("Mail sent successfully!");
+            window.location.reload();
+          },
+          error: function (error) {
+            console.error('Error sending message:', error);
+            closeModal();
+            alert("Mail sent successfully!");
+            window.location.reload();
+          }
+        });
+      }
+
+      function encode(subject) {
+        var enc_subject = btoa(unescape(encodeURIComponent(subject)));
+        return '=?utf-8?B?' + enc_subject + '?=';
+      }
+
+      function getAttachments(files) {
+        // Create an array to store promises
+        const promises = [];
+
+        for (let file of files) {
+          // Create a FileReader
+          const reader = new FileReader();
+
+          // Create a promise for each file read operation
+          const promise = new Promise((resolve) => {
+            // Define the onload event callback
+            reader.onload = function (event) {
+              // Get the base64-encoded content of the file
+              const content = event.target.result.split(",")[1];
+
+              resolve({
+                mimeType: file.type,
+                fileName: file.name,
+                bytes: content,
+              });
+            };
+
+            // Read the file as base64
+            reader.readAsDataURL(file);
+          });
+
+          // Push the promise into the array
+          promises.push(promise);
+        }
+
+        // Use Promise.all to wait for all promises to resolve
+        return Promise.all(promises).then((attachments) => {
+          console.log(attachments);
+          return attachments;
+        });
+      }
+
+      // Create a MIME message that complies with RFC 2822
+      function createMimeMessage(msg) {
+        var nl = '\n';
+        var boundary = '__my_gmail_client__';
+
+        var mimeBody = [
+          'MIME-Version: 1.0',
+          'To: ' + '<' + msg.to + '>',
+          'From: ' + '<' + msg.from + '>',
+          'Subject: ' + encode(msg.subject), // takes care of accented characters
+
+          'Content-Type: multipart/alternative; boundary=' + boundary + nl,
+          '--' + boundary,
+
+          'Content-Type: text/plain; charset=UTF-8',
+          'Content-Transfer-Encoding: base64' + nl,
+          btoa(unescape(encodeURIComponent(msg.body))) + nl,
+        ];
+
+        for (var i = 0; i < msg.files.length; i++) {
+          var attachment = [
+            '--' + boundary,
+            'Content-Type: ' + msg.files[i].mimeType + '; name="' + msg.files[i].fileName + '"',
+            'Content-Disposition: attachment; filename="' + msg.files[i].fileName + '"',
+            'Content-Transfer-Encoding: base64' + nl,
+            msg.files[i].bytes,
+          ];
+
+          mimeBody.push(attachment.join(nl));
+        }
+
+        mimeBody.push('--' + boundary + '--');
+
+        return mimeBody.join(nl);
+      }
+
+    }
+    </script>
+
+</body>
+</html>
